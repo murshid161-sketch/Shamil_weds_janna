@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Shamil & Janna — Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: #faf7f2;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+:root {
+  --dark:    #190f02;
+  --dark2:   #251800;
+  --dark3:   #2e1e04;
+  --cream:   #faf7f2;
+  --cream2:  #f0ebe0;
+  --gold:    #c9a55a;
+  --gold2:   #b8913f;
+  --gold3:   #e8c97a;
+  --text:    #211400;
+  --muted:   #8a7450;
+}
+
+/* ===== COVER ===== */
+#cover {
+  position: fixed; inset: 0;
+  background: #150d00;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 1000; padding: 40px 28px;
+  text-align: center;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+#cover.hidden { opacity: 0; transform: translateY(-30px); pointer-events: none; }
+
+.cover-bismillah {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 24px; color: var(--gold);
+  direction: rtl; unicode-bidi: embed;
+  letter-spacing: 2px; line-height: 1.6;
+  margin-bottom: 36px; opacity: 0.9;
+}
+.cover-dear {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 18px;
+  color: rgba(240,235,224,0.7); margin-bottom: 6px;
+}
+.cover-beloved {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 46px;
+  color: var(--gold); line-height: 1.1; margin-bottom: 42px;
+}
+.cover-groom {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 66px; color: white; line-height: 1;
+}
+.cover-amp {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 48px;
+  color: var(--gold); margin: 4px 0;
+}
+.cover-bride {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 66px; color: white; line-height: 1;
+  margin-bottom: 28px;
+}
+.cover-date {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300; font-size: 11px;
+  letter-spacing: 5px; color: rgba(240,235,224,0.65);
+  margin-bottom: 6px;
+}
+.cover-venue {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 16px;
+  color: rgba(240,235,224,0.55); margin-bottom: 44px;
+}
+.open-btn {
+  width: 100%; max-width: 300px;
+  border: 1px solid var(--gold); background: transparent;
+  color: var(--gold);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300; font-size: 11px;
+  letter-spacing: 4px; text-transform: uppercase;
+  padding: 18px 24px; cursor: pointer;
+  transition: background 0.3s;
+}
+.open-btn:active { background: rgba(201,165,90,0.12); }
+
+/* ===== MAIN ===== */
+#main { display: none; }
+#main.show { display: block; }
+
+/* FLOATING BUTTONS */
+.floats {
+  position: fixed; right: 18px; bottom: 28px;
+  display: flex; flex-direction: column; gap: 12px; z-index: 900;
+}
+.float-wa {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+.float-wa svg { width: 27px; height: 27px; fill: white; }
+.float-music {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #2e1e04;
+  border: 2px solid var(--gold2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: border-color 0.3s;
+}
+.float-music.playing { border-color: var(--gold3); animation: pulse 1.5s infinite; }
+.float-music svg { width: 22px; height: 22px; fill: var(--gold); }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(201,165,90,0.4)} 50%{box-shadow:0 0 0 8px rgba(201,165,90,0)} }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; width: 100%;
+  min-height: 100vh; background: #150d00;
+  overflow: hidden;
+}
+.hero-img {
+  width: 100%; height: 100vh;
+  object-fit: cover; display: block;
+}
+/* Placeholder styling */
+.hero-img-ph {
+  width: 100%; height: 100vh;
+  background: linear-gradient(180deg, #3a2810 0%, #1e1204 50%, #0d0800 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.ph-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(201,165,90,0.3);
+}
+.hero-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 80px 28px 32px;
+  background: linear-gradient(to top, rgba(8,4,0,0.95) 0%, rgba(8,4,0,0.6) 60%, transparent 100%);
+  text-align: center;
+}
+.hero-bless {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(201,165,90,0.65); margin-bottom: 12px;
+}
+.hero-groom-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 62px; color: white; line-height: 1;
+}
+.hero-amp-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 40px;
+  color: var(--gold); margin: 4px 0;
+}
+.hero-bride-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 62px; color: white; line-height: 1;
+}
+.hero-date-n {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300; font-size: 11px;
+  letter-spacing: 5px; color: rgba(240,235,224,0.7);
+  margin-top: 14px;
+}
+
+/* ===== SECTION SHARED ===== */
+.sec-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: 18px;
+}
+.dark .sec-label { color: rgba(201,165,90,0.65); }
+.divider {
+  display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+  margin: 28px 0;
+}
+.div-line { width: 56px; height: 1px; background: var(--gold2); opacity: 0.4; }
+.div-gems { color: var(--gold2); font-size: 13px; }
+
+/* ===== INVITATION ===== */
+.invitation-sec {
+  background: var(--cream); padding: 70px 28px 60px;
+  text-align: center;
+}
+.inv-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 400;
+  color: var(--text); line-height: 1.2; margin-bottom: 28px;
+}
+.inv-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 18px;
+  color: #5a4020; line-height: 1.7;
+}
+.couple-formal {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 23px; font-weight: 600;
+  color: var(--text); margin: 8px 0 12px;
+}
+.countdown-lbl {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 4px; color: var(--gold2);
+  text-transform: uppercase; margin-bottom: 22px;
+}
+.countdown {
+  display: flex; justify-content: center;
+  align-items: center; gap: 12px;
+}
+.cnt-item { text-align: center; }
+.cnt-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 54px; font-weight: 300;
+  color: var(--text); line-height: 1;
+  display: block;
+}
+.cnt-lbl {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 300;
+  letter-spacing: 3px; color: var(--muted);
+  text-transform: uppercase; margin-top: 4px;
+}
+.cnt-dot {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; color: var(--gold2);
+  margin-bottom: 18px;
+}
+
+/* ===== GALLERY ===== */
+.gallery-sec {
+  background: var(--dark2); padding: 68px 0 55px;
+  text-align: center;
+}
+.gallery-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 36px;
+  color: white; margin-bottom: 32px;
+  padding: 0 28px;
+}
+.carousel-wrap { position: relative; overflow: hidden; padding: 0 28px; }
+.carousel-track {
+  display: flex; gap: 18px;
+  transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.c-slide {
+  min-width: calc(100% - 56px);
+  position: relative; border-radius: 14px; overflow: hidden;
+}
+.slide-ph {
+  width: 100%; padding-top: 100%;
+  border-radius: 14px; overflow: hidden;
+  position: relative;
+}
+.slide-ph-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #3d2810, #150d00);
+  display: flex; align-items: center; justify-content: center;
+}
+.slide-ph img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.slide-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 40px 22px 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+}
+.slide-cap-txt {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 16px;
+  color: rgba(255,255,255,0.88);
+}
+.c-nav {
+  display: flex; align-items: center;
+  justify-content: center; gap: 16px;
+  margin-top: 24px; padding: 0 28px;
+}
+.c-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid rgba(201,165,90,0.35);
+  background: transparent; color: var(--gold);
+  font-size: 17px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.c-dots { display: flex; gap: 8px; }
+.cdot {
+  height: 8px; border-radius: 4px;
+  background: rgba(201,165,90,0.3);
+  transition: all 0.3s; width: 8px;
+}
+.cdot.on { width: 26px; background: var(--gold); }
+
+/* ===== EVENTS ===== */
+.events-sec {
+  background: var(--cream); padding: 70px 28px 60px;
+  text-align: center;
+}
+.events-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 400;
+  color: var(--text); margin-bottom: 32px;
+}
+.ev-card {
+  background: white; border-radius: 18px;
+  padding: 34px 24px; margin-bottom: 18px;
+  box-shadow: 0 2px 22px rgba(0,0,0,0.07);
+}
+.ev-card.ev-dark {
+  background: var(--dark); color: white;
+}
+.ev-type {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px;
+}
+.ev-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 300;
+  color: var(--text); line-height: 1;
+}
+.ev-card.ev-dark .ev-date { color: white; }
+.ev-day {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 22px;
+  color: var(--gold); margin: 4px 0 6px;
+}
+.ev-hijri {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; color: rgba(201,165,90,0.7);
+  margin-bottom: 10px;
+}
+.ev-time {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 300;
+  letter-spacing: 3px; color: var(--muted);
+  margin-bottom: 14px;
+}
+.ev-card.ev-dark .ev-time { color: rgba(201,165,90,0.6); }
+.ev-venue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500;
+  color: var(--text); margin-bottom: 6px;
+}
+.ev-card.ev-dark .ev-venue { color: white; }
+.ev-addr {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 300;
+  line-height: 1.9; color: var(--muted);
+  margin-bottom: 22px;
+}
+.ev-card.ev-dark .ev-addr { color: rgba(240,235,224,0.55); }
+.map-btn {
+  display: block; width: 100%;
+  border: 1px solid rgba(201,165,90,0.35);
+  background: transparent; color: var(--gold);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 15px 20px; text-decoration: none;
+  border-radius: 6px; transition: background 0.3s;
+  cursor: pointer;
+}
+.map-btn:active { background: rgba(201,165,90,0.1); }
+
+/* CONTACT CARD */
+.contact-card {
+  background: var(--dark); border-radius: 18px;
+  padding: 30px 24px; margin-top: 18px;
+  text-align: center;
+}
+.contact-lbl {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+}
+.contact-item { margin-bottom: 16px; }
+.contact-item:last-child { margin-bottom: 0; }
+.contact-who {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(240,235,224,0.5); margin-bottom: 4px;
+}
+.contact-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 21px; color: white;
+}
+.contact-num a { color: white; text-decoration: none; }
+
+/* ===== QUOTE ===== */
+.quote-sec {
+  background: var(--cream); padding: 70px 40px;
+  text-align: center;
+}
+.arabic-verse {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 22px; color: var(--gold2);
+  direction: rtl; unicode-bidi: embed;
+  line-height: 1.9; margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+.quote-txt {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 20px;
+  color: var(--text); line-height: 1.75;
+  margin-bottom: 16px;
+}
+.quote-src {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold2);
+}
+
+/* ===== FAMILY ===== */
+.family-sec {
+  background: var(--cream2); padding: 70px 28px 60px;
+  text-align: center;
+}
+.family-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 400;
+  color: var(--text); margin-bottom: 32px;
+  line-height: 1.25;
+}
+.fam-card {
+  background: white; border-radius: 18px;
+  padding: 30px 24px; margin-bottom: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  text-align: left;
+}
+.fam-role {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 300;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold2); text-align: center;
+  margin-bottom: 12px;
+}
+.fam-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 500;
+  color: var(--text); text-align: center;
+  margin-bottom: 22px;
+}
+.fam-divider {
+  width: 40px; height: 1px;
+  background: var(--gold2); opacity: 0.3;
+  margin: 0 auto 20px;
+}
+.fam-row {
+  display: flex; gap: 10px;
+  align-items: flex-start; margin-bottom: 14px;
+}
+.fam-row:last-child { margin-bottom: 0; }
+.fam-gem { color: var(--gold2); font-size: 10px; margin-top: 6px; flex-shrink: 0; }
+.fam-info { flex: 1; }
+.fam-info-lbl {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: #a08060; margin-bottom: 3px;
+}
+.fam-info-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; color: var(--text);
+  line-height: 1.4;
+}
+.late { opacity: 0.6; font-style: italic; }
+
+/* ===== WISHES ===== */
+.wishes-sec {
+  background: var(--dark); padding: 70px 28px 60px;
+  text-align: center;
+}
+.wishes-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 40px;
+  color: white; margin-bottom: 34px;
+}
+.w-input {
+  width: 100%; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(201,165,90,0.2);
+  border-radius: 10px; padding: 15px 18px;
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; margin-bottom: 12px;
+  outline: none; -webkit-appearance: none;
+}
+.w-input::placeholder { color: rgba(255,255,255,0.3); }
+.w-input:focus { border-color: rgba(201,165,90,0.45); }
+textarea.w-input { height: 96px; resize: none; }
+.send-btn {
+  width: 100%; background: transparent;
+  border: 1px solid var(--gold); color: var(--gold);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 300;
+  letter-spacing: 4px; text-transform: uppercase;
+  padding: 16px; cursor: pointer;
+  border-radius: 6px; margin-bottom: 38px;
+  transition: background 0.3s;
+}
+.send-btn:active { background: rgba(201,165,90,0.1); }
+.wish-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px; padding: 20px;
+  margin-bottom: 14px; text-align: left;
+}
+.wish-who {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.wish-msg {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 18px;
+  color: rgba(240,235,224,0.82); line-height: 1.5;
+}
+.load-more {
+  background: transparent;
+  border: 1px solid rgba(201,165,90,0.25);
+  color: rgba(201,165,90,0.6);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 14px 28px; cursor: pointer;
+  width: 100%; border-radius: 6px; margin-top: 8px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--dark2); padding: 52px 28px 40px;
+  text-align: center;
+}
+.footer-names {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 44px;
+  color: var(--gold); margin-bottom: 14px;
+}
+.footer-date {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 300;
+  letter-spacing: 5px; color: rgba(240,235,224,0.5);
+  margin-bottom: 28px;
+}
+.footer-line { width: 60px; height: 1px; background: rgba(201,165,90,0.25); margin: 0 auto 24px; }
+.footer-credit {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(240,235,224,0.25);
+}
+</style>
+</head>
+<body>
+
+<!-- ===== FIREBASE (COMPAT) ===== -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<!-- ===== COVER ===== -->
+<div id="cover">
+  <div class="cover-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="cover-dear">Dear</div>
+  <div class="cover-beloved">Beloved Guest</div>
+  <div class="cover-groom">Shamil</div>
+  <div class="cover-amp">&</div>
+  <div class="cover-bride">Janna</div>
+  <div class="cover-date">0 8 · A U G U S T · 2 0 2 6</div>
+  <div class="cover-venue">Hiltop Auditorium, Kozhikode</div>
+  <button class="open-btn" onclick="openInvitation()">OPEN INVITATION ↓</button>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div id="main">
+
+  <!-- FLOATING BUTTONS -->
+  <div class="floats">
+    <a href="https://wa.me/97334344863" class="float-wa" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <div class="float-music" id="musicBtn" onclick="toggleMusic()">
+      <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-img-ph" id="heroPh">
+      <!-- Replace this div with: <img class="hero-img" src="data:image/jpeg;base64,..." alt="Couple"> -->
+      <div class="ph-label">COUPLE PHOTO PLACEHOLDER</div>
+    </div>
+    <div class="hero-overlay">
+      <div class="hero-bless">✦ WITH THE BLESSINGS OF ALLAH ✦</div>
+      <div class="hero-groom-n">Shamil</div>
+      <div class="hero-amp-n">&</div>
+      <div class="hero-bride-n">Janna</div>
+      <div class="hero-date-n">0 8 &nbsp;·&nbsp; A U G U S T &nbsp;·&nbsp; 2 0 2 6</div>
+    </div>
+  </section>
+
+  <!-- INVITATION -->
+  <section class="invitation-sec">
+    <div class="sec-label">WITH THE BLESSINGS OF ALMIGHTY ALLAH</div>
+    <h2 class="inv-title">You Are Cordially Invited</h2>
+    <p class="inv-text">We joyfully announce the Nikah of</p>
+    <div class="couple-formal">Shamil Ashraf &amp; Janna Parween</div>
+    <p class="inv-text">and humbly request your gracious presence<br>to share in this blessed occasion.</p>
+    <div class="divider">
+      <div class="div-line"></div>
+      <span class="div-gems">◆ ◆ ◆</span>
+      <div class="div-line"></div>
+    </div>
+    <div class="countdown-lbl">DAYS UNTIL FOREVER</div>
+    <div class="countdown">
+      <div class="cnt-item"><span class="cnt-num" id="cDays">--</span><span class="cnt-lbl">DAYS</span></div>
+      <span class="cnt-dot">·</span>
+      <div class="cnt-item"><span class="cnt-num" id="cHrs">--</span><span class="cnt-lbl">HOURS</span></div>
+      <span class="cnt-dot">·</span>
+      <div class="cnt-item"><span class="cnt-num" id="cMins">--</span><span class="cnt-lbl">MINS</span></div>
+      <span class="cnt-dot">·</span>
+      <div class="cnt-item"><span class="cnt-num" id="cSecs">--</span><span class="cnt-lbl">SECS</span></div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-sec">
+    <div class="sec-label" style="color:rgba(201,165,90,0.65)">OUR MOMENTS</div>
+    <h2 class="gallery-title">A Love Story in Frames</h2>
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="track">
+
+        <div class="c-slide">
+          <div class="slide-ph">
+            <div class="slide-ph-bg">
+              <!-- Replace with: <img src="data:image/jpeg;base64,..." alt="Photo 1"> -->
+              <div class="ph-label">PHOTO 1</div>
+            </div>
+          </div>
+          <div class="slide-caption"><div class="slide-cap-txt">Two souls, one destiny, written in love.</div></div>
+        </div>
+
+        <div class="c-slide">
+          <div class="slide-ph">
+            <div class="slide-ph-bg">
+              <!-- Replace with: <img src="data:image/jpeg;base64,..." alt="Photo 2"> -->
+              <div class="ph-label">PHOTO 2</div>
+            </div>
+          </div>
+          <div class="slide-caption"><div class="slide-cap-txt">Every moment with you is a blessing.</div></div>
+        </div>
+
+        <div class="c-slide">
+          <div class="slide-ph">
+            <div class="slide-ph-bg">
+              <!-- Replace with: <img src="data:image/jpeg;base64,..." alt="Photo 3"> -->
+              <div class="ph-label">PHOTO 3</div>
+            </div>
+          </div>
+          <div class="slide-caption"><div class="slide-cap-txt">A love story written in the stars.</div></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="c-nav">
+      <button class="c-btn" onclick="prevSlide()">←</button>
+      <div class="c-dots" id="dots">
+        <div class="cdot on"></div>
+        <div class="cdot"></div>
+        <div class="cdot"></div>
+      </div>
+      <button class="c-btn" onclick="nextSlide()">→</button>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="events-sec">
+    <div class="sec-label">SAVE THE DATE</div>
+    <h2 class="events-title">The Wedding Ceremony</h2>
+
+    <div class="ev-card">
+      <div class="ev-type">NIKAH CEREMONY</div>
+      <div class="ev-date">08.08.2026</div>
+      <div class="ev-day">Saturday</div>
+      <div class="ev-hijri">SAFAR 24, 1448 AH</div>
+      <div class="ev-time">12:30 ONWARDS</div>
+      <div class="ev-venue">Hiltop Auditorium</div>
+      <div class="ev-addr">Purakkatiri<br>Kozhikode, Kerala</div>
+      <a href="https://maps.google.com/?q=Hiltop+Auditorium+Purakkatiri+Kozhikode+Kerala" target="_blank" class="map-btn">📍 VIEW ON MAPS</a>
+    </div>
+
+    <div class="contact-card">
+      <div class="contact-lbl">CONTACT</div>
+      <div class="contact-item">
+        <div class="contact-who">Haris KV (WhatsApp)</div>
+        <div class="contact-num"><a href="https://wa.me/97334344863">+973 343 44863</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-who">Abdul Azeez</div>
+        <div class="contact-num"><a href="tel:+919446005544">+91 94460 05544</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QURAN VERSE -->
+  <section class="quote-sec">
+    <div class="arabic-verse">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا</div>
+    <p class="quote-txt">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them."</p>
+    <div class="quote-src">— QURAN 30:21</div>
+  </section>
+
+  <!-- FAMILY -->
+  <section class="family-sec">
+    <div class="sec-label">OUR FAMILIES</div>
+    <h2 class="family-title">With the Blessings of Our Parents</h2>
+
+    <!-- GROOM FAMILY -->
+    <div class="fam-card">
+      <div class="fam-role">GROOM'S FAMILY</div>
+      <div class="fam-name">Shamil Ashraf</div>
+      <div class="fam-divider"></div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Father</div>
+          <div class="fam-info-val">Mohammad Ashraf MC</div>
+        </div>
+      </div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Mother</div>
+          <div class="fam-info-val">Sajida Ashraf</div>
+        </div>
+      </div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Paternal Grandparents</div>
+          <div class="fam-info-val">Aalikutty M &amp; <span class="late">Late</span> Kadeeja V</div>
+        </div>
+      </div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Maternal Grandparents</div>
+          <div class="fam-info-val"><span class="late">Late</span> MC. Aboobacker Moideenganakath &amp; <span class="late">Late</span> P Kunhi Beevi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRIDE FAMILY -->
+    <div class="fam-card">
+      <div class="fam-role">BRIDE'S FAMILY</div>
+      <div class="fam-name">Janna Parween</div>
+      <div class="fam-divider"></div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Father</div>
+          <div class="fam-info-val">Haris KV</div>
+        </div>
+      </div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Mother</div>
+          <div class="fam-info-val">Nazareena TP</div>
+        </div>
+      </div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Paternal Grandparents</div>
+          <div class="fam-info-val">Abdul Azeez KV &amp; Sara KV</div>
+        </div>
+      </div>
+      <div class="fam-row">
+        <span class="fam-gem">◆</span>
+        <div class="fam-info">
+          <div class="fam-info-lbl">Maternal Grandparents</div>
+          <div class="fam-info-val"><span class="late">Late</span> Abdul Latheef TP &amp; <span class="late">Late</span> Fathima K</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WISHES -->
+  <section class="wishes-sec">
+    <div class="sec-label" style="color:rgba(201,165,90,0.65)">WISHES</div>
+    <h2 class="wishes-title">Send Your Blessings</h2>
+    <input type="text" class="w-input" id="wName" placeholder="Your Name" autocomplete="off">
+    <textarea class="w-input" id="wMsg" placeholder="Write your heartfelt wish..."></textarea>
+    <button class="send-btn" onclick="sendWish()">SEND WISHES ◆</button>
+    <div id="wishesList"></div>
+    <button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">LOAD MORE WISHES</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-names">Shamil &amp; Janna</div>
+    <div class="footer-date">0 8 &nbsp;·&nbsp; A U G U S T &nbsp;·&nbsp; 2 0 2 6</div>
+    <div class="footer-line"></div>
+    <div class="footer-credit">CRAFTED WITH ♥ BY DIGIWED</div>
+  </footer>
+
+</div><!-- /main -->
+
+<script>
+// ============================
+// COVER
+// ============================
+function openInvitation() {
+  const cover = document.getElementById('cover');
+  const main  = document.getElementById('main');
+  cover.classList.add('hidden');
+  main.classList.add('show');
+  setTimeout(() => { cover.style.display = 'none'; }, 900);
+}
+
+// ============================
+// COUNTDOWN  — 8 Aug 2026 12:30
+// ============================
+const TARGET = new Date('2026-08-08T12:30:00');
+function tick() {
+  const diff = TARGET - Date.now();
+  if (diff <= 0) {
+    document.querySelector('.countdown').innerHTML =
+      '<div style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:22px;color:var(--gold)">Alhamdulillah — They are married! 🤍</div>';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cDays').textContent = String(d).padStart(2,'0');
+  document.getElementById('cHrs').textContent  = String(h).padStart(2,'0');
+  document.getElementById('cMins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cSecs').textContent = String(s).padStart(2,'0');
+}
+setInterval(tick, 1000); tick();
+
+// ============================
+// CAROUSEL
+// ============================
+let slide = 0;
+const TOTAL = 3;
+function updateCarousel() {
+  const track = document.getElementById('track');
+  const w = track.parentElement.offsetWidth;
+  track.style.transform = `translateX(-${slide * (w + 18)}px)`;
+  document.querySelectorAll('.cdot').forEach((d,i) => d.classList.toggle('on', i===slide));
+}
+function nextSlide() { slide = (slide+1) % TOTAL; updateCarousel(); }
+function prevSlide() { slide = (slide-1+TOTAL) % TOTAL; updateCarousel(); }
+window.addEventListener('resize', () => updateCarousel());
+
+// ============================
+// MUSIC (optional — add audio src to deploy)
+// ============================
+let audio, playing = false;
+function toggleMusic() {
+  if (!audio) {
+    // audio = new Audio('music.mp3'); audio.loop = true;
+    return;
+  }
+  playing = !playing;
+  playing ? audio.play() : audio.pause();
+  document.getElementById('musicBtn').classList.toggle('playing', playing);
+}
+
+// ============================
+// FIREBASE WISHES
+// ============================
+firebase.initializeApp({
+  apiKey:      "REPLACE_WITH_FIREBASE_API_KEY",
+  authDomain:  "yaseen-jumana-wedding.firebaseapp.com",
+  databaseURL: "https://yaseen-jumana-wedding-default-rtdb.firebaseio.com",
+  projectId:   "yaseen-jumana-wedding",
+  storageBucket: "yaseen-jumana-wedding.appspot.com",
+  messagingSenderId: "REPLACE",
+  appId: "REPLACE"
+});
+
+const db = firebase.database();
+const wishRef = db.ref('/shamil-janna/wishes');
+let allWishes = [];
+let shown = 6;
+
+wishRef.on('value', snap => {
+  allWishes = [];
+  snap.forEach(c => allWishes.unshift({ ...c.val(), k: c.key }));
+  render();
+});
+
+function render() {
+  const el = document.getElementById('wishesList');
+  el.innerHTML = allWishes.slice(0, shown).map(w => `
+    <div class="wish-card">
+      <div class="wish-who">${esc(w.name)}</div>
+      <div class="wish-msg">"${esc(w.message)}"</div>
+    </div>
+  `).join('');
+  document.getElementById('loadMoreBtn').style.display = allWishes.length > shown ? 'block' : 'none';
+}
+
+function loadMore() { shown += 6; render(); }
+
+function sendWish() {
+  const name = document.getElementById('wName').value.trim();
+  const msg  = document.getElementById('wMsg').value.trim();
+  if (!name || !msg) { alert('Please enter your name and wish.'); return; }
+  wishRef.push({ name, message: msg, ts: Date.now() });
+  document.getElementById('wName').value = '';
+  document.getElementById('wMsg').value  = '';
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
