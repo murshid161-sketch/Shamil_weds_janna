@@ -590,6 +590,78 @@ textarea.w-input { height: 96px; resize: none; }
 }
 .wish-heart.liked { color: var(--gold); transform: scale(1.1); }
 
+/* ===== WISH REPLIES + ADMIN ===== */
+.wish-reply {
+  margin-top: 12px; padding: 10px 14px;
+  border-left: 2px solid var(--gold);
+  background: rgba(201,165,90,0.07);
+  border-radius: 0 8px 8px 0; text-align: left;
+}
+.wish-reply-who {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 300; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 5px;
+}
+.wish-reply-msg {
+  font-family: 'Dancing Script', cursive; font-style: italic;
+  font-size: 16px; color: rgba(240,235,224,0.85); line-height: 1.5;
+}
+.reply-new { animation: replyGlow 2.4s ease 3; }
+@keyframes replyGlow { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 0 2px var(--gold)} }
+.wish-admin-btn {
+  margin-top: 10px; background: transparent;
+  border: 1px solid rgba(201,165,90,0.4); color: var(--gold);
+  font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 7px 14px; border-radius: 5px; cursor: pointer; margin-right: 8px;
+}
+.reply-editor { margin-top: 10px; }
+.reply-editor textarea {
+  width: 100%; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(201,165,90,0.3); border-radius: 8px;
+  padding: 10px 12px; color: white; font-family: 'Dancing Script', cursive;
+  font-size: 16px; height: 70px; resize: none; outline: none;
+  margin-bottom: 8px; -webkit-appearance: none;
+}
+#adminBar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 2500; display: none;
+  background: rgba(20,18,12,0.96); color: var(--gold);
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 2px; text-transform: uppercase; padding: 10px 14px; text-align: center;
+}
+#adminBar button {
+  background: transparent; border: 1px solid var(--gold); color: var(--gold);
+  font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 2px;
+  padding: 4px 10px; border-radius: 4px; margin-left: 10px; cursor: pointer;
+}
+#pinModal {
+  position: fixed; inset: 0; z-index: 2600; display: none;
+  background: rgba(0,0,0,0.75); align-items: center; justify-content: center;
+}
+.pin-box {
+  background: var(--dark); border: 1px solid rgba(201,165,90,0.35);
+  border-radius: 14px; padding: 28px 24px; width: 280px; max-width: 86vw;
+  text-align: center;
+}
+.pin-title {
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 3px; color: var(--gold); margin-bottom: 16px;
+}
+.pin-box input {
+  width: 100%; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(201,165,90,0.3); border-radius: 8px;
+  padding: 12px; color: white; text-align: center; letter-spacing: 4px;
+  font-family: 'Montserrat', sans-serif; font-size: 14px; outline: none;
+  margin-bottom: 14px; -webkit-appearance: none;
+}
+.admin-link {
+  margin-top: 22px; background: transparent;
+  border: 1px solid rgba(201,165,90,0.25); color: rgba(201,165,90,0.55);
+  font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 8px 22px; border-radius: 5px; cursor: pointer;
+}
+
 /* ===== FOOTER ===== */
 footer {
   background: var(--dark2); padding: 52px 28px 40px;
@@ -823,7 +895,8 @@ footer {
     <div class="footer-names">Janna &amp; Shamil</div>
     <div class="footer-date">0 8 &nbsp;·&nbsp; A U G U S T &nbsp;·&nbsp; 2 0 2 6</div>
     <div class="footer-line"></div>
-    <div class="footer-credit">CRAFTED WITH ♥ BY DIGIWED</div>
+    <div class="footer-credit" id="dwCredit">CRAFTED WITH ♥ BY DIGIWED</div>
+    <button class="admin-link" onclick="openPin()">ADMIN</button>
   </footer>
 
 </div><!-- /main -->
@@ -832,6 +905,19 @@ footer {
   background:rgba(20,18,12,.95);color:#f0ebe0;padding:12px 22px;border-radius:30px;
   font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:.5px;z-index:3000;
   opacity:0;transition:all .35s ease;pointer-events:none;max-width:86vw;text-align:center;"></div>
+
+<div id="adminBar">ADMIN MODE — REPLY TO WISHES BELOW<button onclick="exitAdmin()">EXIT</button></div>
+
+<div id="pinModal">
+  <div class="pin-box">
+    <div class="pin-title">ADMIN ACCESS</div>
+    <input id="pinInput" type="password" placeholder="PIN" autocomplete="off">
+    <div>
+      <button class="wish-admin-btn" onclick="checkPin()">ENTER</button>
+      <button class="wish-admin-btn" onclick="closePin()" style="margin-right:0">CANCEL</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ============================
@@ -936,6 +1022,7 @@ wishRef.on('value', snap => {
   allWishes = [];
   snap.forEach(c => { allWishes.unshift({ ...c.val(), k: c.key }); });
   render();
+  checkMyReplies();
 });
 
 function render() {
@@ -953,6 +1040,7 @@ function render() {
   }
   allWishes.slice(0, shown).forEach(w => {
     const card = document.createElement('div'); card.className = 'wish-card';
+    card.dataset.key = w.k;
     const who = document.createElement('div'); who.className = 'wish-who';
     who.textContent = String(w.name);
     const msg = document.createElement('div'); msg.className = 'wish-msg';
@@ -964,6 +1052,22 @@ function render() {
     if (localStorage.getItem('liked_' + w.k)) heart.classList.add('liked');
     heart.onclick = () => likeWish(w.k, heart);
     card.append(who, msg, heart);
+    if (w.reply && w.reply.msg) {
+      const rep = document.createElement('div'); rep.className = 'wish-reply';
+      const rwho = document.createElement('div'); rwho.className = 'wish-reply-who';
+      rwho.textContent = '↳ Janna & Shamil';
+      const rmsg = document.createElement('div'); rmsg.className = 'wish-reply-msg';
+      rmsg.textContent = String(w.reply.msg);
+      rep.append(rwho, rmsg);
+      card.appendChild(rep);
+    }
+    if (adminMode) {
+      const rbtn = document.createElement('button'); rbtn.className = 'wish-admin-btn';
+      rbtn.type = 'button';
+      rbtn.textContent = (w.reply && w.reply.msg) ? 'EDIT REPLY' : 'REPLY';
+      rbtn.onclick = () => openReplyEditor(w, card);
+      card.appendChild(rbtn);
+    }
     el.appendChild(card);
   });
   document.getElementById('loadMoreBtn').style.display = allWishes.length > shown ? 'block' : 'none';
@@ -979,13 +1083,13 @@ function likeWish(key, btn) {
 function loadMore() { shown += 6; render(); }
 
 let toastTimer = null;
-function toast(msg, isErr) {
+function toast(msg, isErr, ms) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.style.background = isErr ? 'rgba(140,30,30,.95)' : 'rgba(20,18,12,.95)';
   t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(80px)'; }, 3000);
+  toastTimer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(80px)'; }, ms || 3000);
 }
 
 function sendWish() {
@@ -994,14 +1098,115 @@ function sendWish() {
   if (!name || !msg) { toast('Please enter your name and a wish.', true); return; }
   const btn = document.querySelector('.send-btn');
   btn.disabled = true; btn.style.opacity = '.5';
-  wishRef.push({ name, message: msg, ts: Date.now() }, err => {
+  const newRef = wishRef.push();
+  newRef.set({ name, message: msg, ts: Date.now() }, err => {
     btn.disabled = false; btn.style.opacity = '';
     if (err) { toast('Could not send — check connection and tap SEND again.', true); return; } // inputs preserved
+    rememberMyWish(newRef.key);
     document.getElementById('wName').value = '';
     document.getElementById('wMsg').value  = '';
     toast('Your blessing has been sent 🤍');
   });
 }
+
+// ============================
+// ADMIN MODE — wish replies (PIN-gated)
+// ============================
+const ADMIN_PIN = '2026JS';
+let adminMode = sessionStorage.getItem('swj_admin') === '1';
+if (adminMode) document.getElementById('adminBar').style.display = 'block';
+
+function openPin() {
+  document.getElementById('pinModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('pinInput').focus(), 50);
+}
+function closePin() {
+  document.getElementById('pinModal').style.display = 'none';
+  document.getElementById('pinInput').value = '';
+}
+function checkPin() {
+  if (document.getElementById('pinInput').value.trim().toUpperCase() === ADMIN_PIN) {
+    adminMode = true;
+    sessionStorage.setItem('swj_admin', '1');
+    closePin();
+    document.getElementById('adminBar').style.display = 'block';
+    render();
+    toast('Admin mode on — reply buttons are on each wish.');
+  } else {
+    toast('Wrong PIN.', true);
+  }
+}
+function exitAdmin() {
+  adminMode = false;
+  sessionStorage.removeItem('swj_admin');
+  document.getElementById('adminBar').style.display = 'none';
+  render();
+}
+document.getElementById('pinInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPin(); });
+
+if (new URLSearchParams(location.search).has('admin')) openPin();
+
+function openReplyEditor(w, card) {
+  const old = card.querySelector('.reply-editor');
+  if (old) { old.remove(); return; }
+  const ed = document.createElement('div'); ed.className = 'reply-editor';
+  const ta = document.createElement('textarea');
+  ta.placeholder = 'Write a reply to ' + String(w.name) + '...';
+  if (w.reply && w.reply.msg) ta.value = w.reply.msg;
+  const save = document.createElement('button'); save.className = 'wish-admin-btn';
+  save.type = 'button'; save.textContent = 'SAVE REPLY';
+  save.onclick = () => {
+    const txt = ta.value.trim();
+    if (!txt) { toast('Reply is empty.', true); return; }
+    save.disabled = true;
+    wishRef.child(w.k).child('reply').set({ msg: txt, ts: Date.now() }, err => {
+      save.disabled = false;
+      if (err) { toast('Could not save — try again.', true); return; }
+      toast('Reply sent 🤍');
+    });
+  };
+  ed.append(ta, save);
+  if (w.reply && w.reply.msg) {
+    const del = document.createElement('button'); del.className = 'wish-admin-btn';
+    del.type = 'button'; del.textContent = 'REMOVE';
+    del.onclick = () => {
+      wishRef.child(w.k).child('reply').remove(err => {
+        if (err) { toast('Could not remove — try again.', true); return; }
+        toast('Reply removed.');
+      });
+    };
+    ed.appendChild(del);
+  }
+  card.appendChild(ed);
+}
+
+// ============================
+// SAME-DEVICE REPLY ALERT
+// ============================
+function myWishKeys() {
+  try { return JSON.parse(localStorage.getItem('swj_my_wishes') || '[]'); }
+  catch (e) { return []; }
+}
+function rememberMyWish(key) {
+  const keys = myWishKeys(); keys.push(key);
+  localStorage.setItem('swj_my_wishes', JSON.stringify(keys.slice(-20)));
+}
+function checkMyReplies() {
+  if (document.hidden) return;
+  const mine = myWishKeys();
+  if (!mine.length) return;
+  allWishes.forEach(w => {
+    if (!mine.includes(w.k)) return;
+    if (!(w.reply && w.reply.msg)) return;
+    const seenKey = 'seen_reply_' + w.k + '_' + (w.reply.ts || 0);
+    if (localStorage.getItem(seenKey)) return;
+    localStorage.setItem(seenKey, '1');
+    toast('Janna & Shamil replied to your wish 🤍', false, 6000);
+    const rep = document.querySelector('.wish-card[data-key="' + w.k + '"] .wish-reply');
+    if (rep) rep.classList.add('reply-new');
+  });
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkMyReplies(); });
 </script>
 </body>
 </html>
